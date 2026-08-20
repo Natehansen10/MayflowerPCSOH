@@ -73,10 +73,14 @@ The checklist shrinks. When it says zero, you're clear.
    file and packages the site, *deploy* publishes it.
 4. A minute later it's live at `https://<user>.github.io/<repo>/`.
 
-> If *deploy* fails instantly with an environment or permissions error, step 1
-> hasn't been done — the source is still set to "Deploy from a branch", or the
-> repository is private on a plan where Pages is unavailable. Fix the setting
-> and re-run the workflow from the Actions tab; no new commit is needed.
+> If a job named *explain* fails, step 1 hasn't been done yet. GitHub does not
+> allow a workflow to switch its own repository's Pages source on, so this is
+> the one thing that has to be clicked in the browser. The failure prints the
+> exact setting. Change it, re-run the workflow from the Actions tab — no new
+> commit is needed — and the deploy runs.
+>
+> If the repository is private, Pages additionally requires a plan that
+> includes private Pages sites; making it public is the other way there.
 
 Every later push to that branch republishes automatically. **Regenerate the QR
 codes with the live URL** once you have it (Step 4), or the placards will point

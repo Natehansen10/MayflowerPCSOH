@@ -49,18 +49,25 @@ jobs:
             });
             console.log('content.js OK — '+r.STATIONS.length+' stations');"
 
-      # enablement:true turns Pages on via the API if it has never been
-      # enabled, so a fresh clone of this repo can deploy without a manual step.
-      - uses: actions/configure-pages@v5
+      # enablement:true asks the Pages API to turn Pages on. It succeeds only
+      # where the workflow token is allowed to; where it isn't, the repo owner
+      # has to set the source in Settings, and the "explain" job below says so
+      # rather than letting the deploy fail with an opaque error.
+      - id: pages
+        uses: actions/configure-pages@v5
+        continue-on-error: true
         with:
           enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+    outputs:
+      pages_ready: ${{ steps.pages.outcome }}
 
   deploy:
     needs: build
+    if: needs.build.outputs.pages_ready == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -68,3 +75,25 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@v4
+
+  # Only runs when Pages isn't switched on yet. The site built fine; there is
+  # one setting left, and it can only be changed in the browser.
+  explain:
+    needs: build
+    if: needs.build.outputs.pages_ready != 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Pages is not switched on yet
+        run: |
+          echo "The site built successfully but cannot be published yet."
+          echo
+          echo "Go to:  Settings -> Pages -> Build and deployment"
+          echo "Set:    Source = GitHub Actions"
+          echo
+          echo "Then re-run this workflow from the Actions tab. No new commit"
+          echo "is needed, and every later push publishes on its own."
+          echo
+          echo "If the repository is private, Pages also requires a plan that"
+          echo "includes private Pages sites; making the repository public is"
+          echo "the other way to get there."
+          exit 1

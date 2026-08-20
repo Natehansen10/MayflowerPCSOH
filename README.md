@@ -118,9 +118,11 @@ The site is plain static files, so GitHub Pages hosts it as-is.
    and publishes it, and does the same on every later push.
 3. The site lands at `https://<user>.github.io/<repo>/`.
 
-If the deploy job fails immediately, step 1 hasn't been done yet — the workflow
-cannot publish while Pages is still set to "Deploy from a branch". Fix the
-setting, then re-run the workflow from the **Actions** tab.
+Step 1 cannot be automated: GitHub does not let a workflow switch its own
+repository's Pages source on. Until it's done, the workflow's *build* job still
+runs and packages the site, and a job named *explain* fails with the setting to
+change. Change it, re-run the workflow from the **Actions** tab — no new commit
+needed — and *deploy* takes over from there.
 
 Then regenerate the QR codes against that URL:
 
