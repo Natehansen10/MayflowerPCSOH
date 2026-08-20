@@ -103,14 +103,27 @@ p{margin:0 0 1.15em}
 /* ---- station list -------------------------------------------------------- */
 .st-list{list-style:none;margin:2rem 0 0;padding:0;border-top:1px solid var(--line)}
 .st-list li{border-bottom:1px solid var(--line)}
-.st-list a{display:flex;gap:1.1rem;align-items:center;padding:1.15rem .25rem;
+.st-list a{display:flex;gap:1.1rem;align-items:flex-start;padding:1.3rem .25rem;
   text-decoration:none;transition:.2s var(--ease)}
 .st-list a:hover{padding-left:.7rem;background:linear-gradient(90deg,rgba(131,111,78,.06),transparent)}
-.st-num{font-family:var(--serif);font-size:.95rem;color:var(--bronze);min-width:1.8rem}
-.st-txt strong{display:block;font-family:var(--serif);font-weight:400;font-size:1.06rem;color:var(--head);line-height:1.3}
-.st-txt span{font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;color:var(--warm)}
-.st-mark{margin-left:auto;color:var(--bronze);opacity:0;font-size:.9rem;transition:.2s}
+.st-num{font-family:var(--serif);font-size:.95rem;color:var(--bronze);min-width:1.8rem;padding-top:.05rem}
+.st-txt{min-width:0}
+.st-where{display:block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
+.st-txt strong{display:block;font-family:var(--serif);font-weight:400;font-size:1.08rem;color:var(--head);
+  line-height:1.32;margin-top:.3rem}
+.st-prev{display:block;font-size:.88rem;line-height:1.5;color:var(--body);margin-top:.4rem}
+.st-meta{display:block;font-size:.72rem;letter-spacing:.05em;color:var(--warm);margin-top:.5rem}
+.st-mark{margin-left:auto;align-self:center;color:var(--bronze);opacity:0;font-size:.9rem;transition:.2s}
 .st-list a.saved .st-mark{opacity:1}
+
+/* the numbered "how this works" list on the home page */
+.how{list-style:none;counter-reset:how;margin:1.6rem 0 0;padding:0}
+.how li{counter-increment:how;position:relative;padding:0 0 1.05rem 2.6rem;font-size:.95rem;line-height:1.6}
+.how li::before{content:counter(how);position:absolute;left:0;top:.05rem;
+  font-family:var(--serif);font-size:.85rem;color:var(--bronze);
+  width:1.65rem;height:1.65rem;border:1px solid var(--line);border-radius:50%;
+  display:flex;align-items:center;justify-content:center}
+.how li b{font-weight:500;color:var(--ink)}
 
 /* ---- station page -------------------------------------------------------- */
 .st-hero{position:relative;height:52svh;min-height:300px;background:#2a2926}
@@ -136,6 +149,17 @@ p{margin:0 0 1.15em}
 .honest .eyebrow{display:block;margin-bottom:.6rem}
 .honest p{font-family:var(--serif);font-size:1.05rem;color:var(--head);margin:0;line-height:1.6}
 
+/* "next" card at the foot of a station — the next tap, named */
+.uptonext{border-top:1px solid var(--line);margin:2.4rem 0 0;padding:1.5rem 0 0}
+.uptonext .eyebrow{display:block;margin-bottom:.7rem}
+.uptonext a{display:block;text-decoration:none;padding:1.1rem 1.2rem;background:var(--paper);
+  border-left:2px solid var(--bronze);transition:.2s var(--ease)}
+.uptonext a:hover{transform:translateX(3px)}
+.uptonext strong{display:block;font-family:var(--serif);font-weight:400;font-size:1.06rem;
+  color:var(--head);line-height:1.3}
+.uptonext span{display:block;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--warm);margin-top:.4rem}
+
 .savebar{display:flex;gap:.7rem;align-items:center;margin:2rem 0 1rem}
 .save{flex:1;display:flex;align-items:center;justify-content:center;gap:.6rem;
   padding:1rem;border:1px solid var(--line);background:transparent;border-radius:2px;
@@ -154,6 +178,10 @@ p{margin:0 0 1.15em}
 .step.on{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+.plan-intro{margin:0 0 2.2rem}
+.plan-intro h1{font-size:clamp(1.6rem,5.5vw,2.1rem);margin:.7rem 0 .9rem}
+.plan-intro p{font-size:.95rem;color:var(--body);margin:0}
+.qnum{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin:0 0 .7rem}
 .progress{display:flex;gap:5px;margin:0 0 2.4rem}
 .progress i{flex:1;height:2px;background:var(--line);transition:.4s var(--ease)}
 .progress i.on{background:var(--bronze)}

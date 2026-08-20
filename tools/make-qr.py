@@ -79,13 +79,14 @@ for s in STATIONS:
       <img class="logo" src="../assets/img/logo.png" alt="">
       <span class="num">{e(s['number'])}</span>
     </div>
-    <p class="where">{e(s['where'])}</p>
+    <p class="where">{e(s['where'])} &middot; Detail {e(s['number'])} of {len(STATIONS):02d}</p>
     <h2>{e(s['title'])}</h2>
     <p class="lede">{e(s['lede'])}</p>
+    <p class="body">{e(s['preview'])}</p>
     {cost_block(s)}
     <div class="qrwrap">
       <div class="qr">{svg_inline(s['slug'])}</div>
-      <p class="scan">Scan for the decision<br>behind that number.</p>
+      <p class="scan">Scan to read this one.<br>About a minute.</p>
     </div>
   </section>""")
 
@@ -95,9 +96,11 @@ entry = f"""
     <p class="where">{e(CONFIG['event']['name'])}</p>
     <h1>The Build File</h1>
     <p class="lede big">Most builders hand you a brochure.<br>We'd rather hand you the file.</p>
-    <p class="body">Eight decisions in this house are marked with a placard. Each one tells you what it
-    cost, why we chose it, and what it will mean in twenty years. Including the parts that got harder
-    than we expected.</p>
+    <p class="body"><b>1.</b> Eight decisions in this home are marked with a placard, numbered 01 to 08
+    in the order you'll pass them.<br>
+    <b>2.</b> Scan any placard to read what it cost, why we chose it, and what went wrong.<br>
+    <b>3.</b> Save the ones that matter to you. They stay on your phone.<br>
+    <b>4.</b> Before you leave, scan the last card to see what a home like this would cost you.</p>
     <div class="qrwrap">
       <div class="qr">{svg_inline('entry')}</div>
       <p class="scan">Start here.</p>
@@ -111,9 +114,10 @@ exitcard = f"""
     <img class="logo big" src="../assets/img/logo.png" alt="">
     <p class="where">Before you go</p>
     <h1>What would yours cost?</h1>
-    <p class="lede big">Six questions. Four minutes.<br>A real range, a real schedule.</p>
-    <p class="body">You'll get a preliminary range for the home you describe, a design-to-move-in
-    schedule, and a month-by-month picture of what the money actually does. Curtis sends it himself.</p>
+    <p class="lede big">Seven questions. Four minutes.<br>A preliminary range, and a real schedule.</p>
+    <p class="body">Answer seven questions and the range appears on your screen, along with a
+    design-to-move-in schedule and a month-by-month picture of when the money is spent. No email
+    required to see it. Ask for the written version and Curtis sends it himself.</p>
     <div class="qrwrap">
       <div class="qr">{svg_inline('plan')}</div>
       <p class="scan">Plan your build.</p>

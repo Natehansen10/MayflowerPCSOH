@@ -1,13 +1,22 @@
-# Publishes The Build File to GitHub Pages on every push.
+# Publishes The Build File to GitHub Pages.
 #
-# One-time setup: repo Settings -> Pages -> Source: "GitHub Actions".
-# After that the site is live at https://<user>.github.io/<repo>/ and this
-# workflow keeps it current. Point tools/make-qr.py at that URL before printing.
+# One-time setup, done once by the repo owner:
+#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+# Until that is set, the deploy step cannot run and this workflow fails
+# immediately with an environment error. The build step below still runs, so
+# the logs show whether the site itself is sound.
+#
+# Once live, the site is at https://<owner>.github.io/<repo>/ and every push to
+# a branch listed below refreshes it. Point tools/make-qr.py at that URL before
+# printing the placards.
 name: Deploy the Build File
 
 on:
   push:
-    branches: ["claude/park-city-showcase-strategy-qz34xa"]
+    branches:
+      - claude/mayflower-brand-github-publish-q5wbuj
+      - claude/park-city-showcase-strategy-qz34xa
+      - main
   workflow_dispatch:
 
 permissions:
@@ -20,16 +29,71 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Fails the build rather than publishing a site whose content file is
+      # broken — every page reads from content.js.
+      - name: Check the content file parses
+        run: |
+          node -e "const fs=require('fs');
+            const s=fs.readFileSync('assets/js/content.js','utf8');
+            const r=eval(s+';({CONFIG,STATIONS})');
+            if(!Array.isArray(r.STATIONS)||!r.STATIONS.length) throw new Error('no stations');
+            r.STATIONS.forEach(function(x){
+              ['slug','number','where','title','preview','lede','body'].forEach(function(k){
+                if(!x[k]) throw new Error('station '+x.slug+' is missing '+k);
+              });
+            });
+            console.log('content.js OK — '+r.STATIONS.length+' stations');"
+
+      # enablement:true asks the Pages API to turn Pages on. It succeeds only
+      # where the workflow token is allowed to; where it isn't, the repo owner
+      # has to set the source in Settings, and the "explain" job below says so
+      # rather than letting the deploy fail with an opaque error.
+      - id: pages
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+    outputs:
+      pages_ready: ${{ steps.pages.outcome }}
+
   deploy:
+    needs: build
+    if: needs.build.outputs.pages_ready == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
       - id: deploy
         uses: actions/deploy-pages@v4
+
+  # Only runs when Pages isn't switched on yet. The site built fine; there is
+  # one setting left, and it can only be changed in the browser.
+  explain:
+    needs: build
+    if: needs.build.outputs.pages_ready != 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Pages is not switched on yet
+        run: |
+          echo "The site built successfully but cannot be published yet."
+          echo
+          echo "Go to:  Settings -> Pages -> Build and deployment"
+          echo "Set:    Source = GitHub Actions"
+          echo
+          echo "Then re-run this workflow from the Actions tab. No new commit"
+          echo "is needed, and every later push publishes on its own."
+          echo
+          echo "If the repository is private, Pages also requires a plan that"
+          echo "includes private Pages sites; making the repository public is"
+          echo "the other way to get there."
+          exit 1

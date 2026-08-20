@@ -12,9 +12,17 @@ function renderHome() {
 
   var list = document.getElementById("stations");
   list.innerHTML = STATIONS.map(function (s) {
+    /* Every line says where it is, what it covers and whether a cost is
+       inside, so nobody taps a link without knowing what opens.            */
     return '<li><a class="' + (MF.saved.has(s.slug) ? "saved" : "") + '" href="station.html?s=' + s.slug + '">' +
       '<span class="st-num">' + s.number + '</span>' +
-      '<span class="st-txt"><strong>' + MF.esc(s.title) + '</strong><span>' + MF.esc(s.where) + '</span></span>' +
+      '<span class="st-txt">' +
+        '<span class="st-where">' + MF.esc(s.where) + '</span>' +
+        '<strong>' + MF.esc(s.title) + '</strong>' +
+        '<span class="st-prev">' + MF.esc(s.preview) + '</span>' +
+        '<span class="st-meta">' + (s.cost ? "Includes what it cost on this home" : "Overview") +
+          (MF.saved.has(s.slug) ? " &nbsp;·&nbsp; Saved to your file" : "") + '</span>' +
+      '</span>' +
       '<span class="st-mark">&#9679;</span></a></li>';
   }).join("");
 
