@@ -1,2 +1,5 @@
 .DS_Store
 node_modules/
+
+# regenerable publish copy; dist/preview.html is the one worth keeping
+dist/preview-artifact.html
