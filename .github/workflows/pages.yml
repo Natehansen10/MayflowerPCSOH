@@ -1,14 +1,15 @@
 # Publishes The Build File to GitHub Pages.
 #
-# One-time setup, done once by the repo owner:
-#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
-# Until that is set, the deploy step cannot run and this workflow fails
-# immediately with an environment error. The build step below still runs, so
-# the logs show whether the site itself is sound.
+# GitHub Pages has two publishing modes, and this workflow handles both:
 #
-# Once live, the site is at https://<owner>.github.io/<repo>/ and every push to
-# a branch listed below refreshes it. Point tools/make-qr.py at that URL before
-# printing the placards.
+#   Settings -> Pages -> Build and deployment -> Source
+#     "GitHub Actions"        this workflow builds, checks and publishes the site
+#     "Deploy from a branch"  GitHub publishes the branch's files directly; this
+#                             workflow still checks the content file on every
+#                             push, and says so instead of failing
+#
+# Either way the site is at https://<owner>.github.io/<repo>/. Point
+# tools/make-qr.py at that URL before printing the placards.
 name: Deploy the Build File
 
 on:
@@ -31,6 +32,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,25 +52,31 @@ jobs:
             });
             console.log('content.js OK — '+r.STATIONS.length+' stations');"
 
-      # enablement:true asks the Pages API to turn Pages on. It succeeds only
-      # where the workflow token is allowed to; where it isn't, the repo owner
-      # has to set the source in Settings, and the "explain" job below says so
-      # rather than letting the deploy fail with an opaque error.
-      - id: pages
-        uses: actions/configure-pages@v5
-        continue-on-error: true
-        with:
-          enablement: true
+      # Which mode is this repo in? "workflow" = GitHub Actions,
+      # "legacy" = deploy from a branch, "none" = Pages is off.
+      - id: mode
+        name: Read the Pages publishing mode
+        run: |
+          bt=$(curl -sS -H "Authorization: Bearer ${{ github.token }}" \
+                    -H "Accept: application/vnd.github+json" \
+                    "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pages" \
+               | sed -n 's/.*"build_type"[ ]*:[ ]*"\([a-z]*\)".*/\1/p')
+          mode="${bt:-none}"
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "Pages publishing mode: $mode"
 
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.mode.outputs.mode == 'workflow'
+        uses: actions/configure-pages@v5
+
+      - if: steps.mode.outputs.mode == 'workflow'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: .
-    outputs:
-      pages_ready: ${{ steps.pages.outcome }}
 
+  # Source = "GitHub Actions": publish what the build packaged.
   deploy:
     needs: build
-    if: needs.build.outputs.pages_ready == 'success'
+    if: needs.build.outputs.mode == 'workflow'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -76,16 +85,34 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-  # Only runs when Pages isn't switched on yet. The site built fine; there is
-  # one setting left, and it can only be changed in the browser.
+  # Source = "Deploy from a branch": GitHub is already publishing these files.
+  # Nothing to do, and nothing wrong — say so rather than failing every push.
+  branch-mode:
+    needs: build
+    if: needs.build.outputs.mode == 'legacy'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Published straight from the branch
+        run: |
+          echo "Pages is set to 'Deploy from a branch', so GitHub publishes"
+          echo "these files itself. This run checked the content file and"
+          echo "found it sound. Nothing further to do."
+          echo
+          echo "The site refreshes a minute or two after each push, at"
+          echo "https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          echo
+          echo "Switching Source to 'GitHub Actions' would additionally block a"
+          echo "publish whenever the content file fails the check above."
+
+  # Pages is off entirely. One setting, and it can only be changed in a browser.
   explain:
     needs: build
-    if: needs.build.outputs.pages_ready != 'success'
+    if: needs.build.outputs.mode == 'none'
     runs-on: ubuntu-latest
     steps:
       - name: GitHub Pages is not switched on yet
         run: |
-          echo "The site built successfully but cannot be published yet."
+          echo "The site is sound but cannot be published yet."
           echo
           echo "Go to:  Settings -> Pages -> Build and deployment"
           echo "Set:    Source = GitHub Actions"

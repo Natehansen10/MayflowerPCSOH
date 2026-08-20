@@ -109,20 +109,22 @@ the QR codes point at.
 
 ## Publishing it
 
-The site is plain static files, so GitHub Pages hosts it as-is.
+The site is plain static files, so GitHub Pages hosts it as-is. **Settings →
+Pages → Build and deployment → Source** decides how:
 
-1. In the repo: **Settings → Pages → Build and deployment → Source:
-   GitHub Actions**. This is a one-time click and the only step that has to be
-   done in the browser.
-2. Push. `.github/workflows/pages.yml` checks `content.js`, packages the site
-   and publishes it, and does the same on every later push.
-3. The site lands at `https://<user>.github.io/<repo>/`.
+**Deploy from a branch** — GitHub publishes the branch's files directly. Nothing
+else to configure; the site refreshes a minute or two after each push. The
+workflow still checks `content.js` on every push and reports that this is the
+mode in use. `.nojekyll` is committed so the files are served exactly as
+written.
 
-Step 1 cannot be automated: GitHub does not let a workflow switch its own
-repository's Pages source on. Until it's done, the workflow's *build* job still
-runs and packages the site, and a job named *explain* fails with the setting to
-change. Change it, re-run the workflow from the **Actions** tab — no new commit
-needed — and *deploy* takes over from there.
+**GitHub Actions** — `.github/workflows/pages.yml` builds and publishes instead.
+Same result, with one addition worth having: a push whose `content.js` is broken
+fails the check and never reaches the live site.
+
+Either way the site lands at `https://<user>.github.io/<repo>/`, and the
+workflow tells you in its logs which mode it found. If Pages has not been turned
+on at all, a job named *explain* fails with the setting to change.
 
 Then regenerate the QR codes against that URL:
 
