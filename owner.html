@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Owner Console — Build File</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#ECECE4">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto+Serif:opsz,wght@8..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css">
+<style>
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin:1.5rem 0 2rem}
+  .stats div{background:var(--bg);padding:1rem .6rem;text-align:center}
+  .stats b{display:block;font-family:var(--serif);font-size:1.7rem;color:var(--head);line-height:1}
+  .stats span{font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--warm)}
+  .lead{background:var(--paper);border-left:3px solid var(--line);padding:1.2rem 1.2rem;margin-bottom:.8rem}
+  .lead.A{border-left-color:var(--bronze)}
+  .lead.B{border-left-color:var(--tan)}
+  .lead.R{border-left-color:var(--sky)}
+  .lead .top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+  .lead h3{font-size:1.15rem}
+  .badge{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);
+    background:var(--warm);padding:.25rem .55rem;border-radius:1px;white-space:nowrap}
+  .lead.A .badge{background:var(--bronze)}
+  .lead.B .badge{background:var(--tan)}
+  .lead.R .badge{background:var(--sky);color:var(--ink)}
+  .lead .meta{font-size:.85rem;color:var(--body);margin:.5rem 0 .1rem}
+  .lead .why{font-size:.78rem;color:var(--warm);margin:.45rem 0 0;line-height:1.6}
+  .lead .note{font-size:.85rem;color:var(--ink);background:#fff;padding:.7rem .8rem;margin:.8rem 0 0;
+    border-left:1px solid var(--line)}
+  .lead .acts{display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap}
+  .lead .acts a{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+    border:1px solid var(--line);padding:.55rem .9rem;color:var(--body)}
+  .lead .acts a:hover{border-color:var(--bronze);color:var(--bronze)}
+  .lead .todo{font-family:var(--serif);color:var(--bronze);font-size:.95rem;margin:.7rem 0 0}
+  .filters{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+  .filters button{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;background:transparent;
+    border:1px solid var(--line);padding:.5rem .85rem;cursor:pointer;color:var(--warm)}
+  .filters button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<nav class="bar"><div class="bar-in">
+  <a href="index.html"><img src="assets/img/logo.png" alt="Mayflower"></a>
+  <a class="back" href="#" id="refresh">Refresh</a>
+</div></nav>
+
+<main class="section" style="padding-top:2rem">
+  <div class="wrap">
+    <span class="eyebrow">Owner console</span>
+    <h1 style="margin:.6rem 0 0">Who to call</h1>
+    <div id="body"><p class="muted small" style="margin-top:1.5rem">Loading…</p></div>
+  </div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/content.js"></script>
+<script src="assets/js/core.js"></script>
+<script>
+(function () {
+  var e = MF.esc;
+  var key = MF.qs("key") || "";
+  var filter = "hot";
+  var data = null;
+
+  var ACTION = {
+    A: "Call today. Do not email this one.",
+    B: "Personal email within 48 hours.",
+    C: "Nurture. No action needed.",
+    R: "Agent. Offer a build range for their listings.",
+    T: "Trade. Be courteous, spend nothing."
+  };
+
+  function load() {
+    if (!CONFIG.endpoint || !key) {
+      show('<div class="disc">Open this page as <code>owner.html?key=YOUR_CONSOLE_KEY</code>, ' +
+           'and make sure <code>CONFIG.endpoint</code> is set in assets/js/content.js.</div>');
+      return;
+    }
+    var cb = "mfcb" + Date.now();
+    window[cb] = function (res) {
+      delete window[cb];
+      if (!res.ok) { show('<div class="disc">' + e(res.error || "Error") + '</div>'); return; }
+      data = res; render();
+    };
+    var s = document.createElement("script");
+    s.src = CONFIG.endpoint + (CONFIG.endpoint.indexOf("?") > -1 ? "&" : "?") +
+            "key=" + encodeURIComponent(key) + "&callback=" + cb;
+    s.onerror = function () { show('<div class="disc">Could not reach the backend.</div>'); };
+    document.body.appendChild(s);
+  }
+
+  function show(html) { document.getElementById("body").innerHTML = html; }
+
+  function render() {
+    var st = data.stats || {};
+    var html = '<div class="stats">' +
+      stat(st.total || 0, "Leads") + stat(st.A || 0, "Live") +
+      stat(st.walks || 0, "Want a walk") + stat(st.B || 0, "Warm") + '</div>';
+
+    html += '<div class="filters">' +
+      ["hot", "all", "walks", "agents"].map(function (f) {
+        return '<button data-f="' + f + '" class="' + (f === filter ? "on" : "") + '">' + f + '</button>';
+      }).join("") + '</div>';
+
+    var rows = (data.leads || []).filter(function (l) {
+      if (filter === "hot") return l.Tier === "A" || l.Tier === "B";
+      if (filter === "walks") return l["Wants walk"] === "YES";
+      if (filter === "agents") return l.Tier === "R";
+      return true;
+    }).sort(function (a, b) {
+      var t = "ABRCT".indexOf(a.Tier) - "ABRCT".indexOf(b.Tier);
+      return t !== 0 ? t : (b.Score || 0) - (a.Score || 0);
+    });
+
+    html += rows.length ? rows.map(card).join("") :
+      '<p class="muted small">Nothing here yet.</p>';
+
+    show(html);
+    document.querySelectorAll(".filters button").forEach(function (b) {
+      b.addEventListener("click", function () { filter = b.dataset.f; render(); });
+    });
+  }
+
+  function stat(n, l) { return '<div><b>' + n + '</b><span>' + l + '</span></div>'; }
+
+  function card(l) {
+    var tel = String(l.Phone || "").replace(/[^0-9+]/g, "");
+    var when = l.Received ? new Date(l.Received).toLocaleDateString(undefined,
+      { month: "short", day: "numeric" }) : "";
+    return '<div class="lead ' + e(l.Tier) + '">' +
+      '<div class="top"><h3>' + e(l.Name || "(no name)") + '</h3>' +
+      '<span class="badge">' + e(l.Tier) + ' · ' + e(l.Score) + '</span></div>' +
+      '<p class="meta">' + e(l["Project range"] || "") +
+        (l["Sq ft"] ? " · " + e(l["Sq ft"]) + " sf" : "") +
+        (l.Community ? " · " + e(l.Community) : "") +
+        (l.Finish ? " · " + e(l.Finish) : "") + '</p>' +
+      '<p class="meta muted">' + e(l["Lot status"] || "") + " · " + e(l.Timeline || "") +
+        " · " + when + '</p>' +
+      (l["Wants walk"] === "YES" ? '<p class="todo">Asked to walk a lot.</p>' : '') +
+      '<p class="todo">' + e(ACTION[l.Tier] || "") + '</p>' +
+      (l.Notes ? '<p class="note">' + e(l.Notes) + '</p>' : '') +
+      (l["Why it scored"] ? '<p class="why">' + e(l["Why it scored"]) + '</p>' : '') +
+      '<div class="acts">' +
+        (tel ? '<a href="tel:' + tel + '">Call</a><a href="sms:' + tel + '">Text</a>' : '') +
+        (l.Email ? '<a href="mailto:' + e(l.Email) + '">Email</a>' : '') +
+      '</div></div>';
+  }
+
+  document.getElementById("refresh").addEventListener("click", function (ev) {
+    ev.preventDefault(); show('<p class="muted small">Loading…</p>'); load();
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

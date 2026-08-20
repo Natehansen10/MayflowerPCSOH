@@ -1,0 +1,12 @@
+{
+  "name": "Mayflower Build File",
+  "short_name": "Build File",
+  "description": "The complete build file for a Mayflower custom home.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ECECE4",
+  "theme_color": "#ECECE4",
+  "icons": [
+    { "src": "assets/img/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

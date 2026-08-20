@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Build File — Mayflower Luxury Homes</title>
+<meta name="description" content="The complete build file for a Mayflower custom home: the decisions, the schedule, and the real numbers behind it.">
+<meta name="theme-color" content="#ECECE4">
+<meta property="og:title" content="The Build File — Mayflower Luxury Homes">
+<meta property="og:description" content="Eight decisions, open. What this house cost, why, and what it would take to build yours.">
+<meta property="og:image" content="assets/img/home-2.jpg">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto+Serif:opsz,wght@8..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<nav class="bar">
+  <div class="bar-in">
+    <img src="assets/img/logo.png" alt="Mayflower Luxury Homes">
+    <a class="back" href="plan.html">Plan your build</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <img id="heroimg" alt="">
+  <div class="hero-in">
+    <span class="eyebrow" id="ev"></span>
+    <h1>The Build File</h1>
+    <p id="herosub"></p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <p class="lede" style="margin-top:0">Most builders hand you a brochure. We'd rather hand you the file.</p>
+    <p>You're standing in a home we finished this year. Everything in it was a decision — about structure, about systems, about where the money went and what it bought. Eight of those decisions are marked with a placard as you walk through.</p>
+    <p>Each one tells you what it cost, why we chose it, and what it will mean to the people who live here in twenty years. Including the parts that got harder than we expected.</p>
+
+    <ul class="st-list" id="stations"></ul>
+
+    <p class="tiny" style="margin-top:1.2rem">Tap the mark on any detail to save it to your file. What you save comes with you.</p>
+  </div>
+</section>
+
+<section class="section paper">
+  <div class="wrap">
+    <span class="eyebrow">Before you leave</span>
+    <h2 style="margin:.7rem 0 1rem">What would yours cost?</h2>
+    <p>Six questions — where, how big, how finished, what the ground looks like, and when. Four minutes on your phone.</p>
+    <p>You'll get a real range for a home like the one you're describing, a design-to-move-in schedule, and a month-by-month picture of what the money actually does. It is preliminary and we'll say so plainly. It is also more than most builders will tell you before a contract.</p>
+    <div class="btn-row" style="margin-top:1.8rem">
+      <a class="btn" href="plan.html">Plan your build</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <span class="eyebrow">Who built this</span>
+    <h2 style="margin:.7rem 0 1.2rem">Two owners. Every project.</h2>
+    <p>Mayflower is Curtis and Dave. We build a small number of custom homes at a time in the Wasatch Back, most of them in Skyridge, and one of us is on your job every week for the whole of it. There is no project manager between you and the person who signed your contract.</p>
+    <p>That's the whole pitch. We keep the volume low because a home at this level does not survive being someone's fourth priority.</p>
+
+    <div class="team" id="team"></div>
+
+    <hr class="rule">
+
+    <span class="eyebrow">How we work</span>
+    <h2 style="margin:.7rem 0 1.2rem">Open book, on purpose</h2>
+    <p>You see every subcontractor bid we receive. You see our fee as its own line. Allowances are set against real quotes for things you've actually chosen, not against a number that makes the contract look smaller than the house.</p>
+    <p>When something goes wrong — and on a sixteen-month build something always does — you hear it from us the day it happens, with what it costs and what we recommend. Not on the next draw.</p>
+  </div>
+</section>
+
+<section class="quiet-cta">
+  <div class="wrap">
+    <span class="eyebrow">If you're serious</span>
+    <h2 style="margin:.7rem 0 1rem">Walk a lot with us</h2>
+    <p>The cheapest hour anyone spends on a custom home is the one standing on dirt with a builder who will tell them the truth. If you own a lot, we'll walk it and give you a real range before you spend a dollar on design. If you don't own one yet, walk it with us before you buy.</p>
+    <p style="margin-bottom:2rem">No charge, no obligation, and we'll tell you if we think the lot is a mistake.</p>
+    <div class="btn-row">
+      <a class="btn light" href="plan.html">Plan your build</a>
+      <a class="btn light" id="callcurtis" href="#" style="background:transparent;color:#F6F5F0;border-color:rgba(246,245,240,.3)">Call Curtis</a>
+    </div>
+  </div>
+</section>
+
+<footer data-footer></footer>
+
+<script src="assets/js/content.js"></script>
+<script src="assets/js/core.js"></script>
+<script>
+(function () {
+  var h = CONFIG.home;
+  document.getElementById("ev").textContent = CONFIG.event.name;
+  document.getElementById("herosub").textContent =
+    h.name + " · " + h.sqft.toLocaleString() + " sf · " + h.monthsToBuild + " months · " + h.community;
+
+  var img = document.getElementById("heroimg");
+  img.onload = function () { img.classList.add("on"); };
+  img.src = h.hero;
+
+  var list = document.getElementById("stations");
+  list.innerHTML = STATIONS.map(function (s) {
+    return '<li><a class="' + (MF.saved.has(s.slug) ? "saved" : "") + '" href="station.html?s=' + s.slug + '">' +
+      '<span class="st-num">' + s.number + '</span>' +
+      '<span class="st-txt"><strong>' + MF.esc(s.title) + '</strong><span>' + MF.esc(s.where) + '</span></span>' +
+      '<span class="st-mark">&#9679;</span></a></li>';
+  }).join("");
+
+  var t = CONFIG.contact;
+  document.getElementById("team").innerHTML = [t.curtis, t.dave].map(function (p) {
+    return '<figure><img src="' + p.photo + '" alt="' + MF.esc(p.name) + '" loading="lazy">' +
+      '<figcaption><b>' + MF.esc(p.name) + '</b><span>' + MF.esc(p.role) + '</span></figcaption></figure>';
+  }).join("");
+
+  document.getElementById("callcurtis").href = "tel:" + t.curtis.phone.replace(/[^0-9+]/g, "");
+})();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});}</script>
+</body>
+</html>

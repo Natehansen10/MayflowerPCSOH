@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Plan Your Build — Mayflower Luxury Homes</title>
+<meta name="theme-color" content="#ECECE4">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Roboto+Serif:opsz,wght@8..144,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<nav class="bar">
+  <div class="bar-in">
+    <a href="index.html"><img src="assets/img/logo.png" alt="Mayflower Luxury Homes"></a>
+    <a class="back" href="index.html">The Build File</a>
+  </div>
+</nav>
+
+<main class="section" style="padding-top:2.2rem">
+  <div class="wrap">
+    <div class="progress" id="prog"></div>
+    <div id="steps"></div>
+    <div id="result" style="display:none"></div>
+  </div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/content.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script src="assets/js/core.js"></script>
+<script src="assets/js/plan.js"></script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});}</script>
+</body>
+</html>
