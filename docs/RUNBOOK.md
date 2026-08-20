@@ -65,26 +65,25 @@ The checklist shrinks. When it says zero, you're clear.
 
 **Option A — GitHub Pages (free, no new account):**
 
-1. In the repo on github.com: **Settings → Pages → Build and deployment →
-   Source: GitHub Actions**. Do this once, before anything else. It is the step
-   that has to happen in the browser; nothing else here can do it for you.
-2. Push the branch. `.github/workflows/pages.yml` builds and publishes it.
-3. Watch the **Actions** tab. The run has two jobs: *build* checks the content
-   file and packages the site, *deploy* publishes it.
-4. A minute later it's live at `https://<user>.github.io/<repo>/`.
+1. Push the branch.
+2. In the repo on github.com: **Settings → Pages → Build and deployment**, and
+   set **Source**. Either mode works:
+   - **Deploy from a branch** — pick this branch and `/ (root)`. GitHub
+     publishes the files directly. Simplest, and nothing else to do.
+   - **GitHub Actions** — `.github/workflows/pages.yml` publishes instead, and
+     refuses to publish a push whose `content.js` is broken. Worth choosing if
+     anyone other than you will be editing the copy.
+3. A minute or two later it's live at `https://<user>.github.io/<repo>/`.
 
-> If a job named *explain* fails, step 1 hasn't been done yet. GitHub does not
-> allow a workflow to switch its own repository's Pages source on, so this is
-> the one thing that has to be clicked in the browser. The failure prints the
-> exact setting. Change it, re-run the workflow from the Actions tab — no new
-> commit is needed — and the deploy runs.
->
-> If the repository is private, Pages additionally requires a plan that
-> includes private Pages sites; making it public is the other way there.
+> The **Actions** tab shows which mode the workflow found on each push. A job
+> named *explain* failing means Pages has not been switched on at all —
+> GitHub does not allow a workflow to do that for its own repository, so it is
+> the one thing that has to be clicked in the browser. If the repository is
+> private, Pages also requires a plan that includes private Pages sites.
 
-Every later push to that branch republishes automatically. **Regenerate the QR
-codes with the live URL** once you have it (Step 4), or the placards will point
-somewhere that doesn't exist.
+Every later push republishes automatically. **Regenerate the QR codes with the
+live URL** once you have it (Step 4), or the placards point somewhere that
+doesn't exist.
 
 **Option B — Cloudflare Pages or Netlify (free, prettier URL):**
 
