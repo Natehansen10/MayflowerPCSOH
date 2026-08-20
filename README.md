@@ -93,3 +93,19 @@ node tools/test-backend.js        # exercises the backend with no Google account
 Nothing. Static hosting on GitHub Pages or Cloudflare Pages, and a Google Apps
 Script bound to a spreadsheet you already own. No CRM, no email platform, no form
 service, no subscription that can quietly lapse and take the lead list with it.
+
+---
+
+## Seeing it before it's live
+
+```bash
+python3 tools/build-preview.py      # -> dist/preview.html
+```
+
+One self-contained file with every page, photograph and script inlined and a
+hash router in front of them. Open it on a phone, mail it to someone, no hosting
+required. Review only — the deployed site is the separate files, which is what
+the QR codes point at.
+
+Pushing to the branch deploys to GitHub Pages automatically once
+**Settings → Pages → Source** is set to **GitHub Actions**.

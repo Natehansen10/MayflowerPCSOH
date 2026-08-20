@@ -1,7 +1,7 @@
 /* =============================================================================
    Plan Your Build — the configurator, the brief, and the capture.
    ========================================================================== */
-(function () {
+function renderPlan() {
   var e = MF.esc;
   var answers = MF.plan.get() || {
     community: null, sqft: MODEL.sqft.default, tier: null,
@@ -322,7 +322,7 @@
 
     document.getElementById("redo").addEventListener("click", function () {
       MF.plan.clear();
-      location.href = "plan.html";
+      MF.navTo("plan.html");
     });
 
     document.getElementById("cap").addEventListener("submit", function (ev) {
@@ -399,4 +399,4 @@
 
   /* ---- start ------------------------------------------------------------- */
   go(0);
-})();
+}

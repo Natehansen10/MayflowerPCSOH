@@ -5,7 +5,8 @@ const CACHE = "mf-buildfile-v1";
 const SHELL = [
   "index.html", "station.html", "plan.html",
   "assets/css/app.css",
-  "assets/js/content.js", "assets/js/pricing.js", "assets/js/core.js", "assets/js/plan.js",
+  "assets/js/content.js", "assets/js/pricing.js", "assets/js/core.js",
+  "assets/js/home.js", "assets/js/station-page.js", "assets/js/plan.js",
   "assets/img/logo.png",
   "assets/img/home-1.jpg", "assets/img/home-2.jpg", "assets/img/home-3.jpg",
   "assets/img/home-4.jpg", "assets/img/home-5.jpg", "assets/img/home-6.jpg",

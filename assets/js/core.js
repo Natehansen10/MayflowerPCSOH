@@ -131,6 +131,13 @@ const MF = (() => {
     return new URLSearchParams(location.search).get(name);
   }
 
+  /* Normal navigation, except inside the single-file preview build, where the
+     router takes over so every page lives in one file.                       */
+  function navTo(url) {
+    if (typeof window.MF_ROUTE === "function") return window.MF_ROUTE(url);
+    location.href = url;
+  }
+
   function station(slug) {
     return STATIONS.find(s => s.slug === slug) || null;
   }
@@ -161,7 +168,7 @@ const MF = (() => {
     });
   }
 
-  return { saved, plan, submit, flush, pending, toast, esc, qs, station, boot, get, set };
+  return { saved, plan, submit, flush, pending, toast, esc, qs, navTo, station, boot, get, set };
 })();
 
 document.addEventListener("DOMContentLoaded", MF.boot);
