@@ -62,135 +62,135 @@ Everything on the eight station pages. Facts, cost bands, and the honest lines. 
   ```
   dave:        { name: "Dave",   role: "Owner", phone: "435-555-0101", email: "dave@mayflowerluxuryhomes.com",   photo: "assets/img/team/dave.jpg" }
   ```
-- **L66** — confirm this figure
+- **L78** — confirm this figure
   ```
   ["Conditioned area", "7,100 sf"]
   ```
-- **L67** — confirm this figure
+- **L79** — confirm this figure
   ```
   ["Site to substantial completion", "16 months"]
   ```
-- **L68** — confirm this figure
+- **L80** — confirm this figure
   ```
   ["Trade partners on site", "41"]
   ```
-- **L69** — confirm this figure
+- **L81** — confirm this figure
   ```
   ["Change orders, owner-initiated", "22"]
   ```
-- **L70** — confirm this figure
+- **L82** — confirm this figure
   ```
   ["Change orders, builder error", "3"]
   ```
-- **L73** — confirm this figure
+- **L85** — confirm this figure
   ```
-  honest: "Three change orders on this build were our mistake, not the owner's. We ate them. We'd rather tell you that up front than have you find ou...
+  honest: "Three change orders on this build were our mistake, not the owner's. We absorbed the cost. We would rather tell you that at the front door...
   ```
-- **L88** — confirm this figure
+- **L101** — confirm this figure
   ```
   ["Clear span", "28 ft"]
   ```
-- **L89** — confirm this figure
+- **L102** — confirm this figure
   ```
   ["Glazing", "Triple, thermally broken"]
   ```
-- **L91** — confirm this figure
+- **L104** — confirm this figure
   ```
   ["Lead time on the glass package", "22 weeks"]
   ```
-- **L93** — confirm this figure
+- **L106** — confirm this figure
   ```
-  cost: { label: "Structure + glazing package on this home", range: "$610,000 – $680,000", note: "About 9% of hard cost." }
+  cost: { label: "Structure and glazing package on this home", range: "$610,000 – $680,000", note: "About 9% of hard cost." }
   ```
-- **L94** — confirm this figure
+- **L107** — confirm this figure
   ```
-  honest: "The glass package arrived two weeks late and pushed interior trim. It did not move the completion date, because the schedule had float bui...
+  honest: "The glass package arrived two weeks late and pushed interior trim. It did not move the completion date, because the schedule carried float...
   ```
-- **L109** — confirm this figure
+- **L123** — confirm this figure
   ```
   ["Cabinetry", "Custom, shop-built, rift white oak"]
   ```
-- **L110** — confirm this figure
+- **L124** — confirm this figure
   ```
   ["Appliance package", "Sub-Zero / Wolf"]
   ```
-- **L111** — confirm this figure
+- **L125** — confirm this figure
   ```
   ["Counters", "Book-matched quartzite"]
   ```
-- **L112** — confirm this figure
+- **L126** — confirm this figure
   ```
   ["Lead time, cabinetry", "18 weeks from approved shop drawings"]
   ```
-- **L114** — confirm this figure
+- **L128** — confirm this figure
   ```
-  cost: { label: "Kitchen + pantry, complete", range: "$385,000 – $440,000", note: "Cabinetry is roughly half of it." }
+  cost: { label: "Kitchen and pantry, complete", range: "$385,000 – $440,000", note: "Cabinetry is roughly half of it." }
   ```
-- **L131** — confirm this figure
+- **L146** — confirm this figure
   ```
   ["Radiant heat", "Hydronic, zoned per room"]
   ```
-- **L134** — confirm this figure
+- **L149** — confirm this figure
   ```
-  cost: { label: "Delta over a standard shower system, per wet area", range: "$3,500 – $6,000", note: "Six wet areas on this home." }
+  cost: { label: "Added cost over a standard shower system, per wet area", range: "$3,500 – $6,000", note: "Six wet areas on this home." }
   ```
-- **L150** — confirm this figure
+- **L166** — confirm this figure
   ```
   ["Shop drawing rounds", "3"]
   ```
-- **L152** — confirm this figure
+- **L168** — confirm this figure
   ```
   ["Fabricator", "Local, Heber Valley"]
   ```
-- **L154** — confirm this figure
+- **L170** — confirm this figure
   ```
   cost: { label: "Stair, steel and glass rail, installed", range: "$140,000 – $175,000" }
   ```
-- **L155** — confirm this figure
+- **L171** — confirm this figure
   ```
-  honest: "The first version cleared code and looked wrong in the space. We rebuilt the drawing set on our dime before the steel was cut."
+  honest: "The first version cleared code and looked wrong in the space. We rebuilt the drawing set at our cost before the steel was cut."
   ```
-- **L170** — confirm this figure
+- **L187** — confirm this figure
   ```
   ["Systems share of hard cost", "≈18%"]
   ```
-- **L171** — confirm this figure
+- **L188** — confirm this figure
   ```
   ["Heat", "Hydronic radiant, 9 zones"]
   ```
-- **L174** — confirm this figure
+- **L191** — confirm this figure
   ```
   ["Backup", "Automatic standby generator"]
   ```
-- **L176** — confirm this figure
+- **L193** — confirm this figure
   ```
   cost: { label: "Mechanical, electrical, plumbing and low-voltage", range: "$1.05M – $1.25M", note: "On a home of this size at this elevation." }
   ```
-- **L192** — confirm this figure
+- **L210** — confirm this figure
   ```
   ["Roof assembly", "Ventilated, standing seam"]
   ```
-- **L197** — confirm this figure
+- **L215** — confirm this figure
   ```
   cost: { label: "Exterior envelope, roof and decks", range: "$890,000 – $1.02M" }
   ```
-- **L213** — confirm this figure
+- **L232** — confirm this figure
   ```
   ["Site work on this home", "$740,000"]
   ```
-- **L214** — confirm this figure
+- **L233** — confirm this figure
   ```
   ["Excavation", "Rock encountered at 6 ft"]
   ```
-- **L215** — confirm this figure
+- **L234** — confirm this figure
   ```
   ["Retaining", "Engineered, 2 walls"]
   ```
-- **L218** — confirm this figure
+- **L237** — confirm this figure
   ```
-  cost: { label: "Site, excavation, retaining, utilities and flatwork", range: "$620,000 – $860,000", note: "Highly lot-dependent. This is the single...
+  cost: { label: "Site, excavation, retaining, utilities and flatwork", range: "$620,000 – $860,000", note: "Highly lot-dependent, and the single big...
   ```
-- **L219** — confirm this figure
+- **L238** — confirm this figure
   ```
   honest: "We hit rock at six feet on this lot. It added about $80,000 and eleven days. The owner knew the day we found it, not on the next draw."
   ```

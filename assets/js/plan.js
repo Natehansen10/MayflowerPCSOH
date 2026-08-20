@@ -112,6 +112,7 @@ function renderPlan() {
     var host = document.getElementById("steps");
     host.innerHTML =
       '<div class="step on">' +
+      '<p class="qnum">Question ' + (i + 1) + ' of ' + steps.length + '</p>' +
       '<p class="q">' + e(s.q) + '</p>' +
       (s.sub ? '<p class="qsub">' + e(s.sub) + '</p>' : '<div style="height:1.4rem"></div>') +
       s.render() +
@@ -131,6 +132,11 @@ function renderPlan() {
     var back = document.getElementById("back");
     if (back) back.addEventListener("click", function () { go(stepIndex - 1); });
 
+    /* The explanation earns its space on the first screen and is in the way on
+       every screen after it.                                                 */
+    var intro = document.getElementById("planintro");
+    if (intro) intro.style.display = i === 0 ? "" : "none";
+
     renderProgress();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -139,6 +145,8 @@ function renderPlan() {
   function showResult() {
     document.getElementById("steps").style.display = "none";
     document.getElementById("prog").style.display = "none";
+    var intro = document.getElementById("planintro");
+    if (intro) intro.style.display = "none";
     var r = document.getElementById("result");
     r.style.display = "block";
 
@@ -202,14 +210,15 @@ function renderPlan() {
       html += '<hr class="rule"><span class="eyebrow">Saved to your file</span><ul class="st-list" style="margin-top:1rem">' +
         savedStations.map(function (s) {
           return '<li><a href="station.html?s=' + s.slug + '"><span class="st-num">' + s.number + '</span>' +
-            '<span class="st-txt"><strong>' + e(s.title) + '</strong><span>' + e(s.where) + '</span></span></a></li>';
+            '<span class="st-txt"><span class="st-where">' + e(s.where) + '</span>' +
+            '<strong>' + e(s.title) + '</strong></span></a></li>';
         }).join("") + '</ul>';
     }
 
     /* --- capture --- */
     html += '<hr class="rule"><span class="eyebrow">Keep it</span>' +
       '<h2 style="margin:.7rem 0 1rem">We\'ll send you the full brief</h2>' +
-      '<p>A written version of everything above, plus the allowance schedule and draw structure we\'d actually use on a home like this. It comes from Curtis directly, not from a marketing system.</p>' +
+      '<p>A written version of everything above, plus the allowance schedule and draw structure we would actually use on a home like this. It arrives within a few minutes, from Curtis directly, and we don\'t pass your details to anyone else.</p>' +
       '<form id="cap" novalidate style="margin-top:1.8rem">' +
       field("name", "Name", "text", "name") +
       field("email", "Email", "email", "email") +

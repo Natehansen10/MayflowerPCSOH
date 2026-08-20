@@ -65,10 +65,22 @@ The checklist shrinks. When it says zero, you're clear.
 
 **Option A — GitHub Pages (free, no new account):**
 
-1. Push this branch.
-2. In the repo: **Settings → Pages → Source: Deploy from a branch**, pick the
-   branch and `/ (root)`.
-3. A minute later it's at `https://<user>.github.io/<repo>/`.
+1. In the repo on github.com: **Settings → Pages → Build and deployment →
+   Source: GitHub Actions**. Do this once, before anything else. It is the step
+   that has to happen in the browser; nothing else here can do it for you.
+2. Push the branch. `.github/workflows/pages.yml` builds and publishes it.
+3. Watch the **Actions** tab. The run has two jobs: *build* checks the content
+   file and packages the site, *deploy* publishes it.
+4. A minute later it's live at `https://<user>.github.io/<repo>/`.
+
+> If *deploy* fails instantly with an environment or permissions error, step 1
+> hasn't been done — the source is still set to "Deploy from a branch", or the
+> repository is private on a plan where Pages is unavailable. Fix the setting
+> and re-run the workflow from the Actions tab; no new commit is needed.
+
+Every later push to that branch republishes automatically. **Regenerate the QR
+codes with the live URL** once you have it (Step 4), or the placards will point
+somewhere that doesn't exist.
 
 **Option B — Cloudflare Pages or Netlify (free, prettier URL):**
 

@@ -1,13 +1,22 @@
-# Publishes The Build File to GitHub Pages on every push.
+# Publishes The Build File to GitHub Pages.
 #
-# One-time setup: repo Settings -> Pages -> Source: "GitHub Actions".
-# After that the site is live at https://<user>.github.io/<repo>/ and this
-# workflow keeps it current. Point tools/make-qr.py at that URL before printing.
+# One-time setup, done once by the repo owner:
+#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+# Until that is set, the deploy step cannot run and this workflow fails
+# immediately with an environment error. The build step below still runs, so
+# the logs show whether the site itself is sound.
+#
+# Once live, the site is at https://<owner>.github.io/<repo>/ and every push to
+# a branch listed below refreshes it. Point tools/make-qr.py at that URL before
+# printing the placards.
 name: Deploy the Build File
 
 on:
   push:
-    branches: ["claude/park-city-showcase-strategy-qz34xa"]
+    branches:
+      - claude/mayflower-brand-github-publish-q5wbuj
+      - claude/park-city-showcase-strategy-qz34xa
+      - main
   workflow_dispatch:
 
 permissions:
@@ -20,16 +29,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Fails the build rather than publishing a site whose content file is
+      # broken — every page reads from content.js.
+      - name: Check the content file parses
+        run: |
+          node -e "const fs=require('fs');
+            const s=fs.readFileSync('assets/js/content.js','utf8');
+            const r=eval(s+';({CONFIG,STATIONS})');
+            if(!Array.isArray(r.STATIONS)||!r.STATIONS.length) throw new Error('no stations');
+            r.STATIONS.forEach(function(x){
+              ['slug','number','where','title','preview','lede','body'].forEach(function(k){
+                if(!x[k]) throw new Error('station '+x.slug+' is missing '+k);
+              });
+            });
+            console.log('content.js OK — '+r.STATIONS.length+' stations');"
+
+      # enablement:true turns Pages on via the API if it has never been
+      # enabled, so a fresh clone of this repo can deploy without a manual step.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
       - id: deploy
         uses: actions/deploy-pages@v4

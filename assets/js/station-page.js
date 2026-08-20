@@ -13,7 +13,9 @@ function renderStation(slug) {
   var html = '';
 
   html += '<div class="st-hero"><img src="' + s.photo + '" alt="">' +
-          '<div class="cap"><div class="wrap"><span class="eyebrow">' + s.number + ' &nbsp;/&nbsp; ' + e(s.where) + '</span></div></div></div>';
+          '<div class="cap"><div class="wrap"><span class="eyebrow">' +
+          'Detail ' + s.number + ' of ' + ("0" + STATIONS.length).slice(-2) + ' &nbsp;·&nbsp; ' + e(s.where) +
+          '</span></div></div></div>';
 
   html += '<section class="section"><div class="wrap">';
   html += '<h1>' + e(s.title) + '</h1>';
@@ -33,18 +35,31 @@ function renderStation(slug) {
   }
 
   if (s.honest) {
-    html += '<div class="honest"><span class="eyebrow">What we\'d rather you hear from us</span><p>' + e(s.honest) + '</p></div>';
+    html += '<div class="honest"><span class="eyebrow">What went wrong, and what we did</span><p>' + e(s.honest) + '</p></div>';
   }
 
   html += '<div class="savebar"><button class="save' + (MF.saved.has(s.slug) ? " on" : "") + '" id="save">' +
           '<span id="savetxt">' + (MF.saved.has(s.slug) ? "Saved to your file" : "Save this detail") + '</span></button></div>';
-  html += '<p class="tiny">' + e(s.ask) + ' Curtis or Dave are reachable all week — and what you save here comes with your build brief.</p>';
+  html += '<p class="tiny">Saving keeps this detail on your phone and includes it in your build brief at the end. ' +
+          e(s.ask) + ' Curtis and Dave are both in the house all week.</p>';
 
-  html += '<div class="btn-row" style="margin-top:2.2rem"><a class="btn" href="plan.html">Plan your build</a></div>';
+  /* The end of the walk points at the planner; everywhere else points at the
+     next placard, named, so the next tap is never a guess.                  */
+  if (next) {
+    html += '<div class="uptonext"><span class="eyebrow">Next</span>' +
+            '<a href="station.html?s=' + next.slug + '"><strong>' + next.number + ' &nbsp;·&nbsp; ' +
+            e(next.title) + '</strong><span>' + e(next.where) + '</span></a></div>';
+  } else {
+    html += '<div class="uptonext"><span class="eyebrow">That\'s all eight</span>' +
+            '<a href="plan.html"><strong>Plan your build</strong>' +
+            '<span>Seven questions, about four minutes, answered on this screen</span></a></div>';
+  }
+
+  html += '<div class="btn-row" style="margin-top:2rem"><a class="btn ghost" href="plan.html">Plan your build</a></div>';
 
   html += '<div class="stnav">' +
-    (prev ? '<a href="station.html?s=' + prev.slug + '">&#8592; ' + e(prev.where) + '</a>' : '<a href="index.html">&#8592; All details</a>') +
-    (next ? '<a href="station.html?s=' + next.slug + '">' + e(next.where) + ' &#8594;</a>' : '<a href="plan.html">Plan your build &#8594;</a>') +
+    (prev ? '<a href="station.html?s=' + prev.slug + '">&#8592; ' + prev.number + ' &nbsp;' + e(prev.where) + '</a>' : '<span></span>') +
+    '<a href="index.html">All details</a>' +
     '</div>';
 
   html += '</div></section>';

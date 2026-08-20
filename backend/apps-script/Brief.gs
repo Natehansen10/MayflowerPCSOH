@@ -75,11 +75,16 @@ function briefHtml(d, s) {
 
   var savedList = "";
   if ((d.saved || []).length) {
+    /* Keep these in step with the titles in assets/js/content.js. */
     var names = {
-      "arrival": "What you're standing in", "great-room": "Glass at 6,900 feet",
-      "kitchen": "Where allowances go to die", "primary": "The waterproofing you'll never see",
-      "stair": "Drawn twice, built once", "mechanical": "The eighteen percent nobody photographs",
-      "envelope": "Snow, water, and twenty winters", "site": "The lot decides the budget"
+      "arrival": "01 · Start here: how to read this house",
+      "great-room": "02 · The window wall: steel and glass",
+      "kitchen": "03 · How the kitchen allowances were set",
+      "primary": "04 · Waterproofing behind the tile",
+      "stair": "05 · Shop drawings, and the stair they saved",
+      "mechanical": "06 · The mechanical room, priced",
+      "envelope": "07 · Snow, water, and twenty winters",
+      "site": "08 · Why the lot sets the budget"
     };
     savedList =
       '<p style="font:400 13px ' + sans + ';letter-spacing:.16em;text-transform:uppercase;color:' + bronze + ';margin:34px 0 10px">You saved</p>' +

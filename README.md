@@ -23,7 +23,7 @@ the thing it describes. Including the mechanical room, with a price on it.
 trade partner, and a "what we'd rather you hear from us" paragraph about what
 went wrong. Visitors can save details to their file as they walk.
 
-**Before they leave** — *Plan Your Build*: six questions producing a preliminary
+**Before they leave** — *Plan Your Build*: seven questions producing a preliminary
 cost range, a design-to-move-in schedule, and a month-by-month draw curve.
 Preliminary and clearly labeled as such, which is still more than any competitor
 will tell them before a contract.
@@ -107,5 +107,23 @@ hash router in front of them. Open it on a phone, mail it to someone, no hosting
 required. Review only — the deployed site is the separate files, which is what
 the QR codes point at.
 
-Pushing to the branch deploys to GitHub Pages automatically once
-**Settings → Pages → Source** is set to **GitHub Actions**.
+## Publishing it
+
+The site is plain static files, so GitHub Pages hosts it as-is.
+
+1. In the repo: **Settings → Pages → Build and deployment → Source:
+   GitHub Actions**. This is a one-time click and the only step that has to be
+   done in the browser.
+2. Push. `.github/workflows/pages.yml` checks `content.js`, packages the site
+   and publishes it, and does the same on every later push.
+3. The site lands at `https://<user>.github.io/<repo>/`.
+
+If the deploy job fails immediately, step 1 hasn't been done yet — the workflow
+cannot publish while Pages is still set to "Deploy from a branch". Fix the
+setting, then re-run the workflow from the **Actions** tab.
+
+Then regenerate the QR codes against that URL:
+
+```bash
+python3 tools/make-qr.py https://<user>.github.io/<repo>
+```
